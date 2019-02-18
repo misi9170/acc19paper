@@ -1,0 +1,19 @@
+# Output files
+*.out
+*.bbl
+*.pdf
+*.aux
+*.log
+*.blg
+*.synctex.gz
+
+# Extraneous files
+temp.bib
+
+# Extraneous folders
+reviews/
+figures/
+
+# Reinclude
+!figures_final/FBD_tex.pdf
+!figures_final/prediction_horizon_geo.pdf
