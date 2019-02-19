@@ -52,8 +52,6 @@
 \begin{abstract}
 
 While a growing body of research into model predictive control (MPC) for wind turbines shows that MPC can outperform baseline controllers, literature comparing various MPC formulations is scarce. In this paper, we compare MPC based on numerical linear time-invariant (LTI) and linear parameter-varying (LPV) models with differing prediction horizons. Our MPC formulation includes constraints on the turbine control inputs and explicitly handles disturbance information; a realistic lidar simulator provides preview disturbance and scheduling parameter estimates to the controller. Unsurprisingly, when simulated on a nonlinear model of a wind turbine, the LPV-based controller generally performs better than its LTI counterpart. Further, longer prediction horizons lead to improved performance in the LTI case. However, we find that for the LPV-based MPC, there is no clear improvement in performance with horizon length, with short horizons performing similarly (and in some metrics better) than long horizons. We discuss potential takeaways from this surprising result and its implications for the use of lidar-enabled MPC for wind turbines. 
-%While a growing body of research into model predictive control (MPC) for wind turbines shows that MPC can outperform baseline controllers, literature comparing various MPC formulations is scarce. In this paper, we compare MPC based on numerical linear time-invariant (LTI) and linear parameter-varying (LPV) models with differing prediction horizons. Our MPC formulation includes constraints on the turbine control inputs and explicitly handles disturbance information; a realistic lidar simulator provides preview disturbance and scheduling parameter estimates to the controller. Unsurprisingly, when simulated on a nonlinear model of a wind turbine, the LPV-based controller generally performs better than its LTI counterpart. Further, longer prediction horizons lead to improved performance in the LTI case. However, we find that for the LPV-based MPC, there is no clear improvement in performance with horizon length, with short horizons performing similarly (and in some metrics better) than long horizons. We discuss potential takeaways from this surprising result and its implications for the use of lidar-enabled MPC for wind turbines. 
-% While a growing body of research into model predictive control (MPC) for wind turbines shows that MPC can outperform baseline controllers, literature comparing various MPC formulations is scarce. In this paper, we compare MPC based on numerical linear time-invariant (LTI) and linear parameter-varying (LPV) models with differing prediction horizons. Our MPC formulation includes constraints on the turbine control inputs and utilizes realistic lidar data to provide preview disturbance and scheduling parameter information to the controller. Unsurprisingly, when simulated on a nonlinear model of a wind turbine, the LPV-based controller generally performs better than its LTI counterpart. Further, longer prediction horizons lead to improved performance in the LTI case. However, we find that for the LPV-based MPC, there is no clear improvement in performance with horizon length, with short horizons performing similarly (and in some metrics better) than long horizons. We discuss potential takeaways from this surprising result and its implications for the use of lidar-enabled MPC for wind turbines.
 
 \end{abstract}
 
@@ -63,36 +61,35 @@ While a growing body of research into model predictive control (MPC) for wind tu
 
 Model predictive control has been gaining attention in the wind energy industry for its ability to handle constraints and preview disturbance information explicitly. Numerous studies  have shown that model predictive control (MPC) can be used to reduce structural loads \cite{Bottasso2014}\cite{Tofighi2015} and provide improvements in rotor speed regulation \cite{Laks2012}\cite{Schlipf2013}\cite{Lio2017} when applied to the wind turbine in comparison to reference controllers. Several authors \cite{Bottasso2014}\cite{Gros2017}\cite{Koerber2013}\cite{Raach2014} have utilized lidar scanners to provide measurements of the wind field ahead of the turbine, thus providing feedforward or disturbance preview that can be used to inform control decisions \cite{Schlipf_lidar2015}.
 
-MPC is cast as an optimization problem, where a cost function (usually with terms penalizing tracking errors and excessive use of control inputs) is minimized subject to dynamics enforced by a plant model. In addition, the optimization is carried out subject to constraints on states, inputs, and outputs, which are usually designed to reflect the physical constraints of the system, such as input saturation limits.
+MPC is cast as an optimization problem where a cost function (usually with terms penalizing tracking errors and excessive use of control inputs) is minimized subject to dynamics enforced by a plant model. In addition, the optimization is carried out subject to constraints on states, inputs, and outputs designed to reflect the physical constraints of the system, such as input saturation limits.
 
 While various studies have shown that MPC can outperform reference controllers, competing MPC formulations are rarely compared - exceptions are the work of Schlipf et al. comparing linear to nonlinear MPC \cite{Schlipf2014_2} and Mirzaei et al. on estimating lidar delay \cite{Mirzaei2013}. It is our research goal to investigate and compare differing MPC formulations. In previous work, we compared collective pitch to individual pitch enabled MPCs \cite{Sinner2018} using a linear time-invariant (LTI) MPC law. In the present work, we show that extending to a linear parameter-varying (LPV) model can bring performance improvements over LTI-based MPC and then go on to study the effect that the choice of MPC horizon length has on performance. While guidelines are available for choosing suitable horizon lengths \cite{Rossiter2018}\cite{Seborg2011}, we aim to clarify these in the context of an LPV model and with the presence of disturbance preview information.
 
-This paper is organized as follows. Section \ref{sec:Modeling} presents the wind turbine and lidar models used for this work. Section \ref{sec:Control} briefly presents the control architecture for LPV MPC before considering the implications of different choices of prediction horizon length. Section \ref{sec:SimEnv} describes the testing scenario for this study and Section \ref{sec:Results} presents the results we obtain. 
+%This paper is organized as follows. Section \ref{sec:Modeling} presents the wind turbine and lidar models used for this work. Section \ref{sec:Control} briefly presents the control architecture for LPV MPC before considering the implications of different choices of prediction horizon length. Section \ref{sec:SimEnv} describes the testing scenario for this study and Section \ref{sec:Results} presents the results we obtain. 
 
 \section{MODELING}\label{sec:Modeling}
 
 \subsection{Nonlinear Wind Turbine Model}
 
 Wind turbines are large, complex systems with various flexible components. The full nonlinear turbine model we use is based on FAST \cite{Jonkman2005}, which couples the structural, aerodynamic, and electromechanical components of the turbine. The specific model has been provided by our sponsor for this work, and is representative of a modern multi-megawatt onshore, three-bladed wind turbine. 
-
-\begin{figure}[thbp]
-	\centering
-	\mbox{\includegraphics[scale=1.0]{FBD_tex.pdf}
-	}
-	\caption{Simplified model of wind turbine dynamics. $\Omega$ represents the rotor rotational velocity, $\tau$ is the electrical torque supplied by the generator, and $\beta$ is the pitch angle of a given blade.}
-	\label{fig:FBD}
-\end{figure}
+%\begin{figure}[thbp]
+%	\centering
+%	\mbox{\includegraphics[scale=1.0]{FBD_tex.pdf}
+%	}
+%	\caption{Simplified model of wind turbine dynamics. $\Omega$ represents the rotor rotational velocity, $\tau$ is the electrical torque supplied by the generator, and $\beta$ is the pitch angle of a given blade.}
+%	\label{fig:FBD}
+%\end{figure}
 
 \subsection{Linear Time-invariant Wind Turbine Model}\label{subsec:LTImodel}
 
 MPC is most commonly formulated using a discrete-time (DT) linear time-invariant (LTI) plant model
 \begin{align}\label{eq:LTI_DT}
 \begin{split}
-x(k+1) &= Ax(k) + Bu(k) + B_d d(k) \\
-y(k) &= Cx(k) + Du(k) + D_d d(k),
+x_{k+1} &= Ax_{k} + Bu_{k} + B_d d_k \\
+y_k &= Cx_k + Du_k + D_d d_k,
 \end{split}
 \end{align}
-which, in this case, has been augmented to make disturbances $d\in\mathbb{R}^{m_d}$ and their input and feedthrough matrices $B_d\in\mathbb{R}^{n\times m_d}$ and $B_d\in\mathbb{R}^{p\times m_d}$ explicit. $x\in\mathbb{R}^n$, $u\in\mathbb{R}^m$, $y\in\mathbb{R}^p$, $A \in \mathrm{R}^{n\times n}$, $B\in \mathrm{R}^{n\times m}$, $C\in \mathrm{R}^{p\times n}$ and $D\in \mathrm{R}^{p\times m}$ have their usual meanings. $u$ contains the generator torque and collective blade pitch command and  $d$ includes the effective wind speed \cite{SimleyPao_roteff2013}, horizontal linear shear, and vertical linear shear on the turbine rotor. The state $x$ contains degrees of freedom pertaining to the rotation of the turbine rotor, the first tower fore-aft mode, the first flapwise mode of each of the three blades, and the collective pitch actuator. The output $y$ represents a performance output, as opposed to a measured output, and is discussed further in Section \ref{subsec:LPVMPC}.
+which, in this case, has been augmented to make disturbances $d\in\mathbb{R}^{m_d}$ and their input and feedthrough matrices $B_d\in\mathbb{R}^{n\times m_d}$ and $D_d\in\mathbb{R}^{p\times m_d}$ explicit. $x\in\mathbb{R}^n$, $u\in\mathbb{R}^m$, $y\in\mathbb{R}^p$, $A \in \mathrm{R}^{n\times n}$, $B\in \mathrm{R}^{n\times m}$, $C\in \mathrm{R}^{p\times n}$ and $D\in \mathrm{R}^{p\times m}$ have their usual meanings. $u$ contains the generator torque and collective blade pitch command and  $d$ includes the effective wind speed \cite{SimleyPao_roteff2013}, horizontal linear shear, and vertical linear shear on the turbine rotor. The state $x$ contains degrees of freedom pertaining to the rotation of the turbine rotor, the first tower fore-aft mode, the first flapwise mode of each of the three blades, and the collective pitch actuator. The output $y$ represents a performance output, as opposed to a measured output, and is discussed further in Section \ref{subsec:LPVMPC}.
 
 To construct the model \eqref{eq:LTI_DT}, we first obtain a continuous-time (CT) equivalent using FAST's built-in linearization tools and appending it with a second-order pitch actuator model (which cannot currently be incorporated into the FAST model). The multi-blade coordinate transform is applied to the model to transform all rotating elements of the state to a nacelle-fixed frame so that the model need not be scheduled on rotor azimuth angle \cite{Bir2008}. The final CT model
 \begin{align}\label{eq:LTI_CT}
@@ -143,159 +140,98 @@ The overarching objective of the wind turbine controller is to minimize the cost
 
 \subsection{Linear Parameter-varying Model Predictive Control}\label{subsec:LPVMPC}
 
-In its general form, MPC involves finding a future control trajectory that minimizes a given cost function subject to the plant dynamics and any physical constraints present in the system. MPC is implemented most commonly using a quadratic cost function, linear model, and linear constraints, meaning that it can be cast as a quadratic program. Our implementation is consistent with this, although we use an LPV model in place of an LTI one for the purpose of designing the LPV MPC. In the interest of brevity, we will not present the entire derivation of the LPV MPC law here: we will instead provide an outline, and intend to publish a more comprehensive paper detailing the derivation separately.
+In its general form, MPC involves finding a future control trajectory that minimizes a given cost function subject to the plant dynamics and any physical constraints present in the system. MPC is implemented most commonly using a quadratic cost function, linear model, and linear constraints, meaning that it can be cast as a quadratic program. Our implementation is consistent with this, although we use an LPV model in place of an LTI one for the purpose of designing the LPV MPC. In the interest of brevity, we present only an outline of the LPV MPC law derivation here, and intend to publish a more comprehensive paper detailing the derivation separately. 
+%For brevity, we will not present the entire derivation of the LPV MPC law here: we will instead provide an outline, and intend to publish a more comprehensive paper detailing the derivation separately.
 
 Consider the optimization problem
+%\begin{align}
+%\underset{x_{k+i},u_{k+i},y_{k+i}}{\text{minimize }} & \sum_{i=0}^{N-1}\left\{ y_{k+i}\tran L y_{k+i} + u_{k+i}\tran R' u_{k+i} \right\} + x_N\tran P x_N \label{eq:DTcost} 
+%\end{align}
+%\begin{align}
+%\text{subject to } & x_{k+i+1} = A_{k+i}x_{k+i} + B_{k+i}u_{k+i} \nonumber\\
+%\empty & \hspace{15mm} + B_{dk+i}d_{k+i} - \Delta x^0_{k+i+1, k+i} \label{eq:DTdynamics} \\
+%\empty & x_k = x_{k,\mathrm{meas}} \label{eq:InitialCond} \\
+%\empty & y_{k+i} = C_{k+i}x_{k+i} + D_{k+i}u_{k+i} \nonumber \\
+%\empty & \hspace{15mm} + D_{d{k+i}}d_{k+i} \label{eq:DToutput} \\
+%\empty & u_\mathrm{min} \leq u_{k+i} \leq u_\mathrm{max} \label{eq:DTfirstinequality} \\
+%\empty & |u_{k+i+1} - u_{k+i}| \leq \Delta u_\mathrm{max} \label{eq:DTlastinequality} \\
+%\empty & \hspace{10mm} \forall \: \: i = 0,1,...,N-1. \nonumber 
+%\end{align}
 \begin{align}
-\underset{x_{k+i},u_{k+i},y_{k+i}}{\text{minimize }} & \sum_{i=0}^{N-1}\left\{ y_{k+i}\tran L y_{k+i} + u_{k+i}\tran R' u_{k+i} \right\} + x_N\tran Q_f x_N \label{eq:DTcost} 
+\underset{\tiny{x_{i}, u_{i}, y_{i}}}{\text{minimize }} & \sum_{i=0}^{N-1}\left\{ y_{i}\tran L y_{i} + u_{i}\tran R' u_{i} \right\} + x_N\tran P x_N \label{eq:DTcost} \\
+\text{subject to } & x_{i+1} = A_{i}x_{i} + B_{i}u_{i} + B_{di}d_{i} - \Delta x^0_{i+1, i} \label{eq:DTdynamics} \\
+\empty & x_0 = x_{k,\mathrm{meas}} \label{eq:InitialCond} \\
+\empty & y_{i} = C_{i}x_{i} + D_{i}u_{i} + D_{d{i}}d_{i} \label{eq:DToutput} \\
+\empty & u_\mathrm{min} \leq u_i \leq u_\mathrm{max} \label{eq:DTfirstinequality} \\
+\empty & |u_{i} - u_{i-1}| \leq \Delta u_\mathrm{max} \label{eq:DTlastinequality} \\
+\empty & \hspace{20mm} \forall \: \: i = 0,1,...,N-1. \nonumber 
 \end{align}
-\begin{align}
-\text{subject to } & x_{k+i+1} = A_{k+i}x_{k+i} + B_{k+i}u_{k+i} \nonumber\\
-\empty & \hspace{15mm} + B_{dk+i}d_{k+i} - \Delta x^0_{k+i+1, k+i} \label{eq:DTdynamics} \\
-\empty & x_k = x_{k,\mathrm{meas}} \label{eq:InitialCond} \\
-\empty & y_{k+i} = C_{k+i}x_{k+i} + Du_{k+i} + D_{d{k+i}}d_{k+i} \label{eq:DToutput} \\
-\empty & u_\mathrm{min} \leq u_{k+i} \leq u_\mathrm{max} \label{eq:DTfirstinequality} \\
-\empty & |u_{k+i+1} - u_{k+i}| \leq \Delta u_\mathrm{max} \label{eq:DTlastinequality} \\
-\empty & \hspace{10mm} \forall \: \: i = 0,1,...,N-1. \nonumber 
-\end{align}
-In an overloading of notation, we use $(A_k,B_k,B_{dk},C_k,D_k,D_{dk})$ to represent the discrete-time (DT) state-space model of their CT counterparts, evaluated at the parameter value $\gamma_k$ at the $k$th time. $\Delta x^0_{k+1, k} \coloneqq x^0_{k+1} - x^0_k$, the difference between the linearization operating points of the models at $\gamma_{k+1}$ and $\gamma_k$. $L \geq 0$, $R' > 0$, and $Q_f \geq 0$ are weighting matrices, the design of which is discussed shortly. Finally, \eqref{eq:DTfirstinequality} is used in this study to provide a lower saturation limit for blade pitch and an upper saturation limit for generator torque, while \eqref{eq:DTlastinequality} constrains the blade pitch rate.
+In an overloading of notation, we use $(A_i,B_i,B_{di},C_i,D_i,D_{di})$ to represent the discrete-time (DT) state-space model of their CT counterparts, evaluated at the parameter value $\gamma_{k+i}$ at the $i$th time step. $\Delta x^0_{i+1, i} \coloneqq x^0_{i+1} - x^0_i$, the difference between the linearization operating points of the models at $\gamma_{k+i+1}$ and $\gamma_{k+i}$. $L \geq 0$, $R' > 0$, and $P \geq 0$ are weighting matrices, the design of which is discussed shortly. Finally, \eqref{eq:DTfirstinequality} is used in this study to provide a lower saturation limit for blade pitch and an upper saturation limit for generator torque, while \eqref{eq:DTlastinequality} constrains the blade pitch rate.
 
-Condensing the problem \eqref{eq:DTcost}-\eqref{eq:DTlastinequality} by eliminating the states $x_{k+i}$ from the decision variable leads to the form
+Condensing the problem \eqref{eq:DTcost}-\eqref{eq:DTlastinequality} by eliminating the states $x_{i}$ from the decision variable leads to the form
 \begin{align}
-\underset{\mathbf{u}}{\text{minimize }} & \frac{1}{2}\mathbf{u}\tran \mathbf{H}(\Gamma) \mathbf{u} + \mathbf{h}\tran(\Gamma)\mathbf{u} \label{eq:CondensedCost} \\
+\underset{\mathbf{u}}{\text{minimize}} & \frac{1}{2}\mathbf{u}\tran \mathbf{H}(\Gamma) \mathbf{u} + \mathbf{h}\tran(\Gamma)\mathbf{u} \label{eq:CondensedCost} \\
 \text{subject to } &\mathbf{G}(\Gamma)\mathbf{u} \leq \mathbf{g}(\Gamma) \label{eq:CondensedConstraint}
 \end{align}
 where
 \begin{align*}
-\mathbf{u} &\coloneqq \begin{bmatrix} u_k\tran & u_{k+1}\tran & \cdots & u_{k+N-1}\tran \end{bmatrix}\tran, \hspace{2mm}\text{and} \\
+\mathbf{u} &\coloneqq \begin{bmatrix} u_0\tran & u_{1}\tran & \cdots & u_{N-1}\tran \end{bmatrix}\tran, \hspace{2mm}\text{and} \\
 \Gamma &\coloneqq \begin{bmatrix} \gamma_k & \gamma_{k+1} & \cdots & \gamma_{k+N} \end{bmatrix}\tran; 
 \end{align*} 
-and $\mathbf{H}, \mathbf{h}, \mathbf{G}, \text{ and } \mathbf{g}$ are dependent on various elements of the sparse problem \eqref{eq:DTcost}-\eqref{eq:DTlastinequality}, as listed in Table~\ref{tab:CondensedDependencies}.
-\begin{table}[h]
-	\caption{Condensed MPC problem dependencies}
-	\label{tab:CondensedDependencies}
-	\begin{center}
-		\begin{tabular}{|c||c|c|c|c|}
-			\hline
-			 & $\mathbf{H}$ & $\mathbf{h}$ & $\mathbf{G}$ & $\mathbf{g}$\\
-			\hline
-			Parameter vector $\Gamma$ & \blkdot & \blkdot & \blkdot & \blkdot \\ 
-			\hline 
-			DT model matrices from \eqref{eq:DTdynamics}-\eqref{eq:DToutput} & \blkdot & \blkdot & \blkdot & \blkdot \\
-			\hline
-			Cost function matrices $L,R',Q_f$ & \blkdot & \blkdot & \blkdot & \blkdot \\
-			\hline
-			Current state $x_{k,\mathrm{meas}}$ & \empty & \blkdot & \empty & \blkdot \\
-			\hline
-			Future disturbances $d_{k+i}$ & \empty & \blkdot & \empty & \blkdot \\
-			\hline
-			State operating points $x^0_{k+i}$  & \empty & \blkdot & \empty & \blkdot \\
-			\hline
-			Input operating points $u^0_{k+i}$  & \empty & \empty & \empty & \blkdot \\
-			\hline
-		\end{tabular}
-	\end{center}
-\end{table}
+%and $\mathbf{H}, \mathbf{h}, \mathbf{G}, \text{ and } \mathbf{g}$ are dependent on various elements of the sparse problem \eqref{eq:DTcost}-\eqref{eq:DTlastinequality}, as listed in Table~\ref{tab:CondensedDependencies}.
+and $\mathbf{H}, \mathbf{h}, \mathbf{G}, \text{ and } \mathbf{g}$ are dependent on various elements of the sparse problem \eqref{eq:DTcost}-\eqref{eq:DTlastinequality}.
+%\begin{table}[h]
+%	\caption{Condensed MPC problem dependencies}
+%	\label{tab:CondensedDependencies}
+%	\begin{center}
+%		\begin{tabular}{|c||c|c|c|c|}
+%			\hline
+%			 & $\mathbf{H}$ & $\mathbf{h}$ & $\mathbf{G}$ & $\mathbf{g}$\\
+%			\hline
+%			Parameter vector $\Gamma$ & \blkdot & \blkdot & \blkdot & \blkdot \\ 
+%			\hline 
+%			DT model matrices from \eqref{eq:DTdynamics}-\eqref{eq:DToutput} & \blkdot & \blkdot & \blkdot & \blkdot \\
+%			\hline
+%			Cost function matrices $L,R',Q_f$ & \blkdot & \blkdot & \blkdot & \blkdot \\
+%			\hline
+%			Current state $x_{k,\mathrm{meas}}$ & \empty & \blkdot & \empty & \blkdot \\
+%			\hline
+%			Future disturbances $d_{k+i}$ & \empty & \blkdot & \empty & \blkdot \\
+%			\hline
+%			State operating points $x^0_{k+i}$  & \empty & \blkdot & \empty & \blkdot \\
+%			\hline
+%			Input operating points $u^0_{k+i}$  & \empty & \empty & \empty & \blkdot \\
+%			\hline
+%		\end{tabular}
+%	\end{center}
+%\end{table}
 
 Now, let $\mathbf{u} = \mathbf{u'} + \mathbf{c}$, where $\mathbf{u'} = -\mathbf{H}^{-1}(\Gamma)\mathbf{h}(\Gamma)$ is the unconstrained global minimizer of \eqref{eq:CondensedCost}. Problem \eqref{eq:CondensedCost}-\eqref{eq:CondensedConstraint} can then be replaced with 
 \begin{align}
 \underset{\mathbf{c}}{\text{minimize }} & \frac{1}{2}\mathbf{c}\tran \mathbf{H}(\Gamma) \mathbf{c} \label{eq:CLPCost} \\
 \text{subject to } &\mathbf{G}(\Gamma)\mathbf{c} \leq \mathbf{g}(\Gamma) + \mathbf{G}(\Gamma)\mathbf{H}^{-1}(\Gamma)\mathbf{h}(\Gamma), \label{eq:CLPConstraint}
 \end{align}
-which is in the so-called `closed-loop paradigm' form: we see that $\mathbf{c} = \mathbf{0}$, the minimizer of \eqref{eq:CLPCost}, is optimal so long as \eqref{eq:CLPConstraint} is satisfied, as expected since this gives $\mathbf{u} = \mathbf{u'}$. Finally, the controls sent to the plant at the $k$th time are simply the first entries of $\mathbf{u} = -\mathbf{H}^{-1}(\Gamma)\mathbf{h}(\Gamma) + \mathbf{c}^\star$ (where $\mathbf{c}^\star$ is the solution to \eqref{eq:CLPCost}-\eqref{eq:CLPConstraint}) offset by the current operating point $u^0_k$.  
+%which is in the so-called `closed-loop paradigm' form: we see that $\mathbf{c} = \mathbf{0}$, the minimizer of \eqref{eq:CLPCost}, is optimal so long as \eqref{eq:CLPConstraint} is satisfied, as expected since this gives $\mathbf{u} = \mathbf{u'}$. Finally, the controls sent to the plant at the $k$th time are simply the first entries of $\mathbf{u} = -\mathbf{H}^{-1}(\Gamma)\mathbf{h}(\Gamma) + \mathbf{c}^\star$ (where $\mathbf{c}^\star$ is the solution to \eqref{eq:CLPCost}-\eqref{eq:CLPConstraint}) offset by the current operating point $u^0_k$.  
+which is in the so-called `closed-loop paradigm' form: we see that $\mathbf{c} = \mathbf{0}$, the minimizer of \eqref{eq:CLPCost}, is optimal so long as \eqref{eq:CLPConstraint} is satisfied as expected. Finally, the controls sent to the plant at the $k$th time are simply the first entries of $\mathbf{u} = -\mathbf{H}^{-1}(\Gamma)\mathbf{h}(\Gamma) + \mathbf{c}^\star$ (where $\mathbf{c}^\star$ is the solution to \eqref{eq:CLPCost}-\eqref{eq:CLPConstraint}) offset by the current operating point $u^0_k$. 
 
-The running cost matrices $L$ and $R'$ are constructed using the same collective pitch control cost function as \cite{Sinner2018}, with $L$, the performance output cost, containing terms penalizing deviations in rotor speed, tower fore-aft motions, and pitching accelerations, and $R'$ penalizing torque and pitch commands. The terminal cost \cite{Rawlings2000} matrix $Q_f$ is found by solving the discrete algebraic Riccati equation 
-\begin{align}\label{eq:DARE}
-\begin{split}
- Q_f &= A_{k+N}\tran Q_f A_{k+N} + C_{k+N}\tran L C_{k+N}\\ 
- \empty & \hspace{2mm}-(A_{k+N}\tran Q_f B_{k+N} + C_{k+N}\tran L D_{k+N})(B_{k+N}\tran Q_f B_{k+N} \\
- \empty & \hspace{2mm} +D_{k+N}\tran L D_{k+N} + R')^{-1}(A_{k+N}\tran Q_f B_{k+N} \\
- \empty & \hspace{2mm} +C_{k+N}\tran L D_{k+N})\tran.
- \end{split}
-\end{align}
-
+The running cost matrices $L$ and $R'$ are constructed using the same collective pitch control cost function as \cite{Sinner2018}, with $L$, the performance output cost, containing terms penalizing deviations in rotor speed, tower fore-aft motions, and pitching accelerations, and $R'$ penalizing torque and pitch commands. The terminal cost matrix $P$ is found by solving the discrete algebraic Riccati equation \cite{Rawlings2000} for the model evaluated at time $k+N$.
+%\begin{align}\label{eq:DARE}
+%\begin{split}
+% Q_f &= A_{k+N}\tran Q_f A_{k+N} + C_{k+N}\tran L C_{k+N}\\ 
+% \empty & \hspace{2mm}-(A_{k+N}\tran Q_f B_{k+N} + C_{k+N}\tran L D_{k+N})(B_{k+N}\tran Q_f B_{k+N} \\
+% \empty & \hspace{2mm} +D_{k+N}\tran L D_{k+N} + R')^{-1}(A_{k+N}\tran Q_f B_{k+N} \\
+% \empty & \hspace{2mm} +C_{k+N}\tran L D_{k+N})\tran.
+% \end{split}
+%\end{align}
 We note here that $x_{k,\mathrm{meas}}$, the current state of the system used in \eqref{eq:InitialCond}, \eqref{eq:CondensedCost}, \eqref{eq:CondensedConstraint}, and \eqref{eq:CLPConstraint}, is assumed to be measured perfectly (i.e, the MPC algorithm is a state feedback law). In practice, an observer would need to be designed to reconstruct a state estimate $\hat{x}_k$ to replace $x_{k,\mathrm{meas}}$ from measured outputs $\tilde{y}$.
-
-
-%Hessian matrix, which is constructed from the cost function \eqref{eq:DTcost} and parameter-dependent DT model \eqref{eq:DTdynamics}-\eqref{eq:DToutput}, $\mathbf{h}$, $\mathbf{G}$, $\mathbf{g}$
-
-%\subsection{LPV Model Predictive Control NEEDS REWORKING}
-%
-%In its general form, MPC involves finding a future control trajectory that minimizes a given cost function subject to the plant dynamics and any physical constraints present in the system. MPC is implemented most commonly using a quadratic cost function, linear model, and linear constraints, meaning that it can be cast as a quadratic program. Our implementation is consistent with this, although we use an LPV model in place of an LTI one.
-%
-%Consider the optimization problem
-%\begin{align}
-%\text{minimize } & \sum_{i=0}^{N-1}\left\{ y_{k+i}\tran L y_{k+i} + u_{k+i}\tran R' u_{k+i} \right\} + x_N\tran Q_f x_N \label{eq:DTcost} \\
-%\text{subject to } & x_{k+i+1} = A_{k+i}x_{k+i} + B_{k+i}u_{k+i} + B_{dk+i}d_{k+i}  \nonumber\\
-%\empty & \hspace{15mm}- \Delta x^*_{k+i+1, k+i} \label{eq:DTstate} \\
-%\empty & y_{k+i} = C_{k+i}x_{k+i} + Du_{k+i} + D_{d{k+i}}d_{k+i} \label{eq:DToutput} \\
-%\empty & \hspace{10mm} \forall \: \: i = 0,1,...,N-1. \nonumber
-%\end{align}
-%In an overloading of notation, we use $(A_k,B_k,B_{dk},C_k,D_k,D_{dk})$ to represent the discrete-time (DT) state-space model of their CT counterparts, evaluated at the parameter value $\gamma_k$ at the $k$th time. $\Delta x^*_{k+1, k} \coloneqq x^*_{k+1} - x^*_k$, the difference between the linearization operating points of the models at $\gamma_{k+1}$ and $\gamma_k$. Finally, $L \geq 0$, $R' > 0$, and $Q_f \geq 0$ are weighting matrices, the design of which is discussed shortly. 
-%
-%Substituting the output equation \eqref{eq:DToutput} into the cost function \eqref{eq:DTcost}, we have 
-%\begin{align*}
-%y_k\tran L y_k + u_k\tran R' u_k &= x_k\tran Q_k x_k + u_k\tran R_k u_k + 2x_k\tran S_k u_k \\
-%\empty & \hspace{5mm} + 2x_k\tran T_k d_k + 2u_k\tran U_k d_k + c
-%\end{align*} 
-%where $Q_k = C_k\tran L C_k$, $R_k = D_k\tran L D_k + R'$, $S_k = C_k\tran L D_k$, $T_k = C_k\tran L D_{dk}$, $U_k = D_k\tran L D_{dk}$, and $c$ is used here to generally represent terms that are constant in the optimization and do not change the optimal solution.
-%
-%The problem is condensed by eliminating the need for the states $x_{k+i}, i = 0,1,...,N$ in the decision space. We express \eqref{eq:DTstate} as
-%\begin{equation}\label{eq:matrixdynamics} \mathbf{x} = \mathbf{A}x_k + \mathbf{B}\mathbf{u} + \mathbf{B_d}\mathbf{d} + \mathbf{\Delta}
-%\end{equation}
-%where 
-%$$ \mathbf{x} \coloneqq \begin{bmatrix} x_k\tran & x_{k+1}\tran & \cdots & x_{k+N}\tran \end{bmatrix}\tran, $$
-%$$ \mathbf{u} \coloneqq \begin{bmatrix} u_k\tran & u_{k+1}\tran & \cdots & u_{k+N-1}\tran \end{bmatrix}\tran, \hspace{2mm}\text{and} $$
-%$$ \mathbf{d} \coloneqq \begin{bmatrix} d_k\tran & d_{k+1}\tran & \cdots & d_{k+N-1}\tran \end{bmatrix}\tran, $$
-%and 
-%$$ \mathbf{A} \coloneqq \begin{bmatrix} I \\ A_k \\ A_{k+1}A_k \\ \vdots \\ A_{k+N-1}\cdots A_k \end{bmatrix}, $$
-%$$ \mathbf{B} \coloneqq \begin{bmatrix} 0 & 0 & \cdots & 0 \\ B_k & 0 & \cdots & 0 \\ A_{k+1}B_k & B_{k+1} & \empty & \vdots \\
-%\vdots & \ddots & \ddots & \empty \\
-%A_{k+N-1}\cdots A_{k+1}B_k & \cdots & A_{k+N-1}B_{k+N-2} & B_{k+N-1} \end{bmatrix}, \hspace{2mm}\text{and}$$
-%$$ \mathbf{B_d} \coloneqq \begin{bmatrix} 0 & 0 & \cdots & 0 \\ B_dk & 0 & \cdots & 0 \\ A_{k+1}B_dk & B_{dk+1} & \empty & \vdots \\
-%\vdots & \ddots & \ddots & \empty \\
-%A_{k+N-1}\cdots A_{k+1}B_dk & \cdots & A_{k+N-1}B_{dk+N-2} & B_{dk+N-1} \end{bmatrix}, \hspace{2mm}\text{and}$$
-%$$ \mathbf{\Delta} \coloneqq \begin{bmatrix} 0 & 0 & \cdots & 0 \\ I & 0 & \cdots & 0 \\ A_{k+1} & I & \empty & \vdots \\
-%\vdots & \ddots & \ddots & \empty \\
-%A_{k+N-1}\cdots A_{k+1} & \cdots & A_{k+N-1} & I \end{bmatrix}.$$
-%
-%The cost function is then expressed as
-%\begin{equation}\label{eq:sparsematrixCF} \mathbf{x}\tran \mathbf{Q} \mathbf{x} + \mathbf{u}\tran \mathbf{R}\mathbf{u} + 2\mathbf{x}\tran \mathbf{S}\mathbf{u} + 2\mathbf{x}\tran\mathbf{T}\mathbf{d} + 2\mathbf{u}\tran\mathbf{U}\mathbf{d} + c
-%\end{equation}
-%with 
-%$$ \mathbf{Q} \coloneqq \begin{bmatrix} Q_k & 0 & \cdots & \empty & 0 \\ 0 & Q_{k+1} & \empty & \empty & \vdots \\ \vdots & \empty & \ddots & \empty & \empty \\
-%\empty & \empty & \empty & Q_{k+N-1} & \empty \\
-%0 & \cdots & \empty  & \empty & Q_f \end{bmatrix}, $$
-%
-%$$ \mathbf{R} \coloneqq \begin{bmatrix} R_k & 0 & \cdots & 0 \\ 0 & R_{k+1} & \empty & \vdots \\ \vdots & \empty & \ddots & \empty \\
-%0 & \cdots & \empty & R_{k+N-1}  \end{bmatrix}, $$
-%
-%$$ \mathbf{S} \coloneqq \begin{bmatrix} S_k & 0 & \cdots & 0 \\ 0 & S_{k+1} & \empty  & \vdots \\ \vdots & \empty & \ddots & \empty \\
-%\empty & \empty & \empty & S_{k+N-1}  \\
-%0 & \cdots & \empty  &  0 \end{bmatrix}, $$
-%
-%$$ \mathbf{T} \coloneqq \begin{bmatrix} T_k & 0 & \cdots & 0 \\ 0 & T_{k+1} & \empty  & \vdots \\ \vdots & \empty & \ddots & \empty \\
-%\empty & \empty & \empty & T_{k+N-1}  \\
-%0 & \cdots & \empty  &  0 \end{bmatrix}, \hspace{2mm}\text{and}$$
-%
-%$$ \mathbf{U} \coloneqq \begin{bmatrix} U_k & 0 & \cdots & 0 \\ 0 & U_{k+1} & \empty  & \vdots \\ \vdots & \empty & \ddots & \empty \\
-%\empty & \empty & \empty & U_{k+N-1} \end{bmatrix}.$$
-%
-%Substituting \eqref{eq:matrixdynamics} into \eqref{eq:sparsematrixCF} gives the condensed cost function
-%\begin{align}\label{eq:condensedCF}
-%\begin{split} \mathbf{u}\tran\left(\mathbf{R} + \mathbf{B}\tran\mathbf{Q}\mathbf{B} + 2\mathbf{B}\tran\mathbf{S}\right) ... \\ 
-%+ 2\left(\left(x_k\tran\mathbf{A}\tran + \mathbf{d}\tran \mathbf{B_d} +\mathbf{\Delta}\tran\right) \left(\mathbf{Q}\mathbf{B} + \mathbf{S}\right) + \mathbf{d}\tran\left(\mathbf{T}\tran\mathbf{B} + \mathbf{U}\tran\right)\right)\mathbf{u} + c
-%\end{split}
-%\end{align}
-%
-%Some more things will need to go in here... Possibly... although I'm tempted to leave out all the math, there is quite a lot of it.
 
 \subsection{Linear Time-invariant Model Predictive Control}
 
-The design procedure for LTI MPC can be considered simply as a simplification of that described in Section \ref{subsec:LPVMPC}, where $\gamma$ is constant. However, instead of evaluating the LPV model \eqref{eq:LPV_CT_simple} at the mean wind speed $\gamma = 16$, we use the original 16~m/s DT linear model \eqref{eq:LTI_DT}. All dependencies on the parameter vector $\Gamma$ in Table~\ref{tab:CondensedDependencies} are thus removed, and $\mathbf{H}$, $\mathbf{h}$, $\mathbf{G}$, and $\mathbf{g}$ become time invariant (and can be computed offline). The overall size of the optimization problem \eqref{eq:CLPCost}-\eqref{eq:CLPConstraint} does not change. Notably, $\Delta x^0_{k+i+1,k+i} \equiv 0$ in the LTI case.
+%The design procedure for LTI MPC can be considered simply as a simplification of that described in Section \ref{subsec:LPVMPC}, where $\gamma$ is constant. However, instead of evaluating the LPV model \eqref{eq:LPV_CT_simple} at the mean wind speed $\gamma = 16$, we use the original 16~m/s DT linear model \eqref{eq:LTI_DT}. All dependencies on the parameter vector $\Gamma$ in Table~\ref{tab:CondensedDependencies} are thus removed, and $\mathbf{H}$, $\mathbf{h}$, $\mathbf{G}$, and $\mathbf{g}$ become time invariant (and can be computed offline). The overall size of the optimization problem \eqref{eq:CLPCost}-\eqref{eq:CLPConstraint} does not change. Notably, $\Delta x^0_{k+i+1,k+i} \equiv 0$ in the LTI case.
+The design procedure for LTI MPC is a simplification of that described in Section \ref{subsec:LPVMPC} where $\gamma$ is constant. However, instead of evaluating the LPV model \eqref{eq:LPV_CT_simple} at the mean wind speed $\gamma = 16$, we use the original 16~m/s DT linear model \eqref{eq:LTI_DT}. All dependencies on the parameter vector $\Gamma$ in Table~\ref{tab:CondensedDependencies} are thus removed, and $\mathbf{H}$, $\mathbf{h}$, $\mathbf{G}$, and $\mathbf{g}$ become time invariant (and can be computed offline). The overall size of the optimization problem \eqref{eq:CLPCost}-\eqref{eq:CLPConstraint} does not change. Notably, $\Delta x^0_{k+i+1,k+i} \equiv 0$ in the LTI case.
 
 \subsection{Choice of Prediction Horizon}
-Throughout the MPC derivation we have not discussed the selection of the prediction horizon $N$. Although the terminal cost matrix $Q_f$ technically extends the cost function (and system model) to an infinite horizon \cite{Rawlings2000}, it does so without enforcing constraints \eqref{eq:DTfirstinequality}, \eqref{eq:DTlastinequality}, \eqref{eq:CondensedConstraint}, \eqref{eq:CLPConstraint} and without taking into account parameter variations beyond the $N$th step or disturbance preview beyond the $N-1$th step. Having implemented the controller derived, we proceed to investigate the impact that the choice of $N$ has on controller performance.
+Throughout the MPC derivation we have not discussed the selection of the prediction horizon $N$. Although the terminal cost matrix $P$ technically extends the cost function (and system model) to an infinite horizon \cite{Rawlings2000}, it does so without enforcing constraints \eqref{eq:DTfirstinequality}, \eqref{eq:DTlastinequality}, \eqref{eq:CondensedConstraint}, \eqref{eq:CLPConstraint} and without taking into account parameter variations beyond the $N$th step or disturbance preview beyond the $N-1$th step. Having implemented the controller derived, we proceed to investigate the impact that the choice of $N$ has on controller performance.
 
 MPC texts for LTI systems \cite{Rossiter2018}\cite{Seborg2011} generally recommend using a horizon length that is long enough to capture significant system dynamics, but not so long as to unnecessarily increase the computational burden of MPC. We have chosen to maintain a fixed controller sampling rate of $f_s = 100$~Hz to be consistent with the baseline controller. This guideline therefore leads us to a horizon length on the order of $N=100$, since significant turbine behaviors tend to happen on the order of seconds (pitch actuator, tower fore-aft, blade flap, and rotor motions). Although we might reasonably expect this guideline to extend to the LPV system, the impact of advance preview information is not clear. As such, we test various horizons ranging from $N = 1$ (0.01~seconds of preview) to $N = 200$ (2~seconds of preview). We consider ourselves to be constrained on the upper end by the focus distance of the lidar, which provides a maximum of around 5~seconds of preview information for Region III winds ($N_\mathrm{max} = 500$), but found that prediction horizons $N > 200$ led to unreasonable computation times. 
 
@@ -312,57 +248,13 @@ where $n_\mathrm{filt}$ is the number of samples in the moving average, and must
 Simley \& Pao \cite{SimleyPao2015} suggest that longitudinal coherence between the wind field as measured by the lidar and the wind field encountered by the turbine is low for turbulent structures above 0.3~Hz at the preview distance we are considering (approximately 100~m). Using a sample time of 0.01~seconds, the noncausal moving averge filter with $n_\mathrm{filt} = 151$ rolls off at about 0.3~Hz (Fig.~\ref{fig:bodes}). Therefore, for different values of $N$, we choose $n_\mathrm{filt}$ according to $n_\mathrm{filt} = \mathrm{min}\{151, 2(N_\mathrm{max} - N)+1\}$.
 
 We similarly need to filter the lidar measurement to provide the scheduling parameter $\gamma$. To keep the {\color{black}scheduling parameter `smooth', we say (somewhat arbitrarily) that the desired roll-off in frequency content in $\gamma$ is 0.03~Hz}, a decade below the roll-off of the preview filter. This corresponds to a noncausal moving average filter \eqref{eq:mafilter_nc} with $n_\mathrm{filt} \approx 1501$. Since $(1501-1)/2 \geq N_\mathrm{max} = 500$, we simply choose $n_\mathrm{filt} = 2(N_\mathrm{max} - N)+1$ in all prediction horizon length test cases. An example of the `ideally' filtered measurements ($n_\mathrm{filt} = 151$ for preview disturbance estimates and $n_\mathrm{filt} = 1501$ for preview parameter estimates) is shown in Fig.~\ref{fig:lidarmeas} (bottom). 
-\begin{figure}[thbp]
-	\centering
-	\mbox{\includegraphics[trim=0 0 0 -5, clip, scale=1.0]{filter_bodes.eps}
-	}
-	\caption{Bode magnitude diagrams for (causal version) of `ideal' moving average filters used for preview measurement $n_\mathrm{filt} = 151$ and parameter measurement $n_\mathrm{filt} = 1501$ filtering.}
-	\label{fig:bodes}
-\end{figure}
-
-%The problem is condensed by eliminating the need for the states $x_{k+i}, i = 0,1,...,N$ in the decision space. We express \eqref{eq:DTstate} as
-%$$ \begin{bmatrix}\mathbf{x} \\ x_{k+N} \end{bmatrix} = \mathbf{A}x_k + \mathbf{B}\mathbf{u} + \mathbf{B_d}\mathbf{d} + (\mathbf{\Delta}!!)$$
-%where 
-%$$ \mathbf{x} \coloneqq \begin{bmatrix} x_k\tran & x_{k+1}\tran & \cdots & x_{k+N-1}\tran \end{bmatrix}\tran, $$
-%$$ \mathbf{u} \coloneqq \begin{bmatrix} u_k\tran & u_{k+1}\tran & \cdots & u_{k+N-1}\tran \end{bmatrix}\tran, \hspace{2mm}\text{and} $$
-%$$ \mathbf{d} \coloneqq \begin{bmatrix} d_k\tran & d_{k+1}\tran & \cdots & d_{k+N-1}\tran \end{bmatrix}\tran, $$
-%and 
-%$$ \mathbf{A} \coloneqq \begin{bmatrix} I \\ A_k \\ A_{k+1}A_k \\ \vdots \\ A_{k+N-1}\cdots A_k \end{bmatrix}, $$
-%$$ \mathbf{B} \coloneqq \begin{bmatrix} 0 & 0 & \cdots & 0 \\ B_k & 0 & \cdots & 0 \\ A_{k+1}B_k & B_{k+1} & \empty & \vdots \\
-%\vdots & \ddots & \ddots & \empty \\
-%A_{k+N-1}\cdots A_{k+1}B_k & \cdots & A_{k+N-1}B_{k+N-2} & B_{k+N-1} \end{bmatrix}, \hspace{2mm}\text{and}$$
-%$$ \mathbf{B_d} \coloneqq \begin{bmatrix} 0 & 0 & \cdots & 0 \\ B_dk & 0 & \cdots & 0 \\ A_{k+1}B_dk & B_{dk+1} & \empty & \vdots \\
-%\vdots & \ddots & \ddots & \empty \\
-%A_{k+N-1}\cdots A_{k+1}B_dk & \cdots & A_{k+N-1}B_{dk+N-2} & B_{dk+N-1} \end{bmatrix}, \hspace{2mm}\text{and}$$
-%$$ \mathbf{\Delta} \coloneqq \begin{bmatrix} 0 & 0 & \cdots & 0 \\ I & 0 & \cdots & 0 \\ A_{k+1} & I & \empty & \vdots \\
-%\vdots & \ddots & \ddots & \empty \\
-%A_{k+N-1}\cdots A_{k+1} & \cdots & A_{k+N-1} & I \end{bmatrix}.$$
-%
-%The cost function is then expressed as
-%$$ \begin{bmatrix}\mathbf{x} \\ x_{k+N} \end{bmatrix}\tran \begin{bmatrix} \mathbf{Q} & 0 \\ 0 & Q_f \end{bmatrix}\begin{bmatrix}\mathbf{x} \\ x_{k+N} \end{bmatrix} + \mathbf{u}\tran \mathbf{R}\mathbf{u} + 2\mathbf{x}\tran \mathbf{S}\mathbf{u} + \mathbf{x}\tran\mathbf{T}\mathbf{d} + 2\mathbf{u}\tran\mathbf{U}\mathbf{d} + c $$
-%with $\mathbf{Q}$ (resp. $\mathbf{R}$, $\mathbf{S}$, $\mathbf{T}$, $\mathbf{U}$) defined as
-%$$\mathbf{Q} \coloneqq \begin{bmatrix} Q_k & 0 & \cdots & 0 \\ 0 & Q_{k+1} & \empty & \vdots \\ \vdots & \empty & \ddots & \empty \\
-%0 & \cdots & \empty  & Q_{k+N-1} \end{bmatrix}, $$
-%(resp. $R_{k+i}$,$S_{k+i}$, $T_{k+i}$, $U_{k+i}$). constructed as 
-%$$ \mathbf{R} \coloneqq \begin{bmatrix} R_k & 0 & \cdots & \empty & 0 \\ 0 & R_{k+1} & \empty & \empty & \vdots \\ \vdots & \empty & \ddots & \empty & \empty \\
-%\empty & \empty & \empty & R_{k+N-1} & \empty \\
-%0 & \cdots & \empty  & \empty & Q_f \end{bmatrix} $$
-
-
-%\begin{enumerate}
-%	\item Getting LTI models
-%	
-%	blah blah
-%	\item Scheduling the CT models
-%	\item Discretizing
-%	\item Putting them into the big matrices
-%	\item Cost function? Here or somewhere else?
-%	\item Cost function terminal cost
-%	\item Condensing
-%	\item Solution to condensed problem (is this anything, exactly?)
-%	\item TALK ABOUT CLP? WON'T NEED CONSTRAINTS HERE THOUGH? MORE THAN I WANT TO TALK ABOUT IN THIS PAPER.
-%\end{enumerate}
-
+%\begin{figure}[thbp]
+%	\centering
+%	\mbox{\includegraphics[trim=0 0 0 -5, clip, scale=1.0]{filter_bodes.eps}
+%	}
+%	\caption{Bode magnitude diagrams for (causal version) of `ideal' moving average filters used for preview measurement $n_\mathrm{filt} = 151$ and parameter measurement $n_\mathrm{filt} = 1501$ filtering.}
+%	\label{fig:bodes}
+%\end{figure}
 
 \subsection{Baseline Controller}
 
@@ -395,11 +287,11 @@ The main difference between the control laws used in our previous study \cite{Si
 We see that, using the same cost functions and operating at mean wind speeds that align with the linearization point of the LTI model, the LTI and LPV MPCs behave comparably. However, from Figs.~\ref{fig:lidarmeas} (top) and \ref{fig:GS_ltivs} (top), we see that the LTI MPC's performance worsens significantly at times when the rotor average wind speed deviates significantly from the linearization point of the LTI model, as happens at 650-700~seconds. 
 
 \subsection{Prediction Horizon Length Testing}
-In varying the prediction horizon for MPC, we limit both the controller's awareness of physical constraints and its knowledge of disturbances and, in the LPV case, parameter variations outside of the finite horizon. A major trade off in the MPC formulation is between prediction horizon length and computational burden of the nonlinear control law. Textbooks \cite{Rossiter2018}\cite{Seborg2011} suggest choosing a horizon that is just long enough to provide good performance (particularly compared to long horizon cases) when there is no information about future disturbances. This is clearly a heuristic, and may differ significantly for different systems. By testing various prediction horizon lengths $N \in \{1, 2, 5, 10, 20, 50, 100, 200\}$, corresponding to 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, and 2~seconds of prediction, we hope to provide some answer to the question of the trade-off between prediction horizon length and computational burden for preview-enabled wind turbine MPC.    
+In varying the prediction horizon for MPC, we limit both the controller's awareness of physical constraints and its knowledge of disturbances and, in the LPV case, parameter variations outside of the finite horizon. A major trade off in the MPC formulation is between prediction horizon length and computational burden of the nonlinear control law. Textbooks \cite{Rossiter2018}\cite{Seborg2011} suggest choosing a horizon that is just long enough to provide good performance (particularly compared to long horizon cases) when there is no information about future disturbances. This is clearly a heuristic, and may differ significantly for different systems. By testing various prediction horizon lengths $N \in \{1, 2, 5, 10, 20, 50, 100, 200\}$, corresponding to 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, and 2~seconds of prediction, we hope to provide some insight to the trade-off between prediction horizon length and computational burden for preview-enabled wind turbine MPC.    
 
 We have not made significant efforts in this work to solve the dense quadratic program \eqref{eq:CLPCost}-\eqref{eq:CLPConstraint} efficiently. As such, we will use as an indicator of the complexity the problem size, rather than computation time. For both LTI and LPV MPC, the size of the optimization variable is $\mathrm{dim}\:(\mathbf{c}) = mN = 2N$ and the number of constraints is $\mathrm{dim}\:(\mathbf{g}) = 4N$. We note that the case $N = N_\mathrm{max} = 500$ was not tested thoroughly because the computation time was too great. As measures of the performance of the controllers, we use generator speed root mean square error (RMSE); tower base fore-aft moment damage equivalent load (DEL) \cite{Hayman2012}; and RMS pitch actuator velocity as percentages of the baseline controller value. These quantities are averaged across the six wind fields to give the final statistic, which is shown in Fig.~\ref{fig:bargraph}. 
 
-The results obtained are a far cry from the expected poorer performance of lower horizon length MPCs. While this trend is, arguably, present for the LTI MPC case, there is no clear evidence that longer horizons lead to better performance for the LPV MPC: although generator speed regulation does show very slight improvements with increasing horizon length, this comes at the cost of increased pitch actuator usage. Tower base fore-aft moment DEL is lowest for $N = 50$, but the results for $1 \leq N < 50$ are not significantly worse.
+The results obtained are a far cry from the expected poorer performance of lower horizon length MPCs. While this trend is, arguably, present for the LTI MPC case, there is no clear evidence that longer horizons lead to better performance for the LPV MPC: although generator speed regulation does show very slight improvements with increasing horizon length, this comes at the cost of increased pitch actuator usage. Tower base fore-aft moment DEL is lowest for $N = 50$, but results for $1 \leq N < 50$ are not significantly worse.
 
 \begin{figure}[thbp]
 	\centering
@@ -409,11 +301,10 @@ The results obtained are a far cry from the expected poorer performance of lower
 	\label{fig:bargraph}
 \end{figure}
 
-There are several possible explanations for this surprising behavior. A contributing factor may be the level to which the lidar data is filtered, particularly for the scheduling parameter. Larger $N$ means that the filter whose output $\gamma$ is used to schedule the model has a higher bandwidth, which can lead to more erratic changes in the MPC operating point and higher than necessary pitch motions. However, one could consider the LTI MPC as an extreme case of low-pass filtering the parameter estimate (so that only the DC component remains), and as is evident in generator speed regulation performance in particular, behavior of the LTI MPC is worse than LVP MPC for short horizons. Part of this deterioration could be from the implicit assumption in \eqref{eq:DARE} that $d_{k+i} = 0\:\forall\:i>N-1$: for LPV MPC, this assumption is reasonable since both the scheduling parameter and disturbance preview $d_k$ are filtered versions of the same signal; however, for LTI MPC, the change from $d_{N-1}$ to zero at the final prediction time could be large. This suggests that there may be an `ideal' order for the moving average filter $H(z)$ that lies somewhere in the interval $999 < n_\mathrm{filt} < \infty$ (where $n_\mathrm{filt} = 999$ is the maximum filter order possible given the lidar focus distance), but this sweet spot is not investigated in this research. If such an ideal $n_\mathrm{filt}$ exists, it could be used to inform a good focus distance for the lidar.
+There are several possible explanations for this surprising behavior. A contributing factor may be the level to which the lidar data is filtered, particularly for the scheduling parameter. Larger $N$ means that the filter whose output $\gamma$ is used to schedule the model has a higher bandwidth, which can lead to more erratic changes in the MPC operating point and higher than necessary pitch motions. However, one could consider the LTI MPC as an extreme case of low-pass filtering the parameter estimate (so that only the DC component remains), and as is evident in generator speed regulation performance in particular, behavior of the LTI MPC is worse than LPV MPC for short horizons. Part of this deterioration could be from the implicit assumption in \eqref{eq:DARE} that $d_{i} = 0\:\forall\:i>N-1$: for LPV MPC, this assumption is reasonable since both the scheduling parameter and disturbance preview $d_k$ are filtered versions of the same signal; however, for LTI MPC, the change from $d_{N-1}$ to zero at the final prediction time could be large. This suggests that there may be an `ideal' order for the moving average filter $H(z)$ that lies somewhere in the interval $999 < n_\mathrm{filt} < \infty$ (where $n_\mathrm{filt} = 999$ is the maximum filter order possible given the lidar focus distance), but this sweet spot is not investigated in this research. If such an ideal $n_\mathrm{filt}$ exists, it could be used to inform a good focus distance for the lidar.
 
 We also point out that the MPC is implemented over a nonlinear plant (which differs significantly from the LTI or LPV models used by the controller). The MPC algorithm propagates the model forward over the prediction horizon in open loop, and large discrepancies between the prediction and actual nonlinear plant behavior can occur, particularly for longer horizons. The effect of large prediction errors can mean that control inputs $u_{k+i}, i \gg 1$ are not useful. Moreover, large discrepancies could cause an optimal solution that exchanges good (but erroneous) performance in the long horizon for poorer performance in the short horizon. It seems plausible that the increase in pitching behavior for longer horizons could be a result of this sort of effect.
-
-\addtolength{\textheight}{-1cm} 
+%\addtolength{\textheight}{-1cm} 
 
 It is also important to note that the single-step cost function matrices $L$ and $R'$ were kept constant for this study. All results presented here rely heavily on the cost function chosen, and different weightings will lead to different trade-offs in behavior. For instance, the very poor generator speed regulation seen for short horizon LTI MPC could probably be improved by choosing different weights, but this will more than likely come at the cost of tower loading and blade pitch performance.
 
@@ -435,44 +326,11 @@ Our research intent is to continue to investigate various aspects of the MPC for
 
 \section*{ACKNOWLEDGMENT}
 
-We thank Jeff Butterworth, Eric Simley, Demet Ulker, Liang Dong, Kevin Standish, Daniel Zalkind, and Roger Braker for their continued support, suggestions, and insights on this work.
+We thank Jeff Butterworth, Eric Simley, Demet Ulker, Liang Dong, Kevin Standish, Daniel Zalkind, and Roger Braker for their support, suggestions, and insight.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \bibliography{ACC19refs}
 \bibliographystyle{IEEEtran}
-
-%\begin{thebibliography}{99}
-%
-%\bibitem{c1} G. O. Young, ÒSynthetic structure of industrial plastics (Book style with paper title and editor),Ó 	in Plastics, 2nd ed. vol. 3, J. Peters, Ed.  New York: McGraw-Hill, 1964, pp. 15Ð64.
-%\bibitem{c2} W.-K. Chen, Linear Networks and Systems (Book style).	Belmont, CA: Wadsworth, 1993, pp. 123Ð135.
-%\bibitem{c3} H. Poor, An Introduction to Signal Detection and Estimation.   New York: Springer-Verlag, 1985, ch. 4.
-%\bibitem{c4} B. Smith, ÒAn approach to graphs of linear forms (Unpublished work style),Ó unpublished.
-%\bibitem{c5} E. H. Miller, ÒA note on reflector arrays (Periodical styleÑAccepted for publication),Ó IEEE Trans. Antennas Propagat., to be publised.
-%\bibitem{c6} J. Wang, ÒFundamentals of erbium-doped fiber amplifiers arrays (Periodical styleÑSubmitted for publication),Ó IEEE J. Quantum Electron., submitted for publication.
-%\bibitem{c7} C. J. Kaufman, Rocky Mountain Research Lab., Boulder, CO, private communication, May 1995.
-%\bibitem{c8} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ÒElectron spectroscopy studies on magneto-optical media and plastic substrate interfaces(Translation Journals style),Ó IEEE Transl. J. Magn.Jpn., vol. 2, Aug. 1987, pp. 740Ð741 [Dig. 9th Annu. Conf. Magnetics Japan, 1982, p. 301].
-%\bibitem{c9} M. Young, The Techincal Writers Handbook.  Mill Valley, CA: University Science, 1989.
-%\bibitem{c10} J. U. Duncombe, ÒInfrared navigationÑPart I: An assessment of feasibility (Periodical style),Ó IEEE Trans. Electron Devices, vol. ED-11, pp. 34Ð39, Jan. 1959.
-%\bibitem{c11} S. Chen, B. Mulgrew, and P. M. Grant, ÒA clustering technique for digital communications channel equalization using radial basis function networks,Ó IEEE Trans. Neural Networks, vol. 4, pp. 570Ð578, July 1993.
-%\bibitem{c12} R. W. Lucky, ÒAutomatic equalization for digital communication,Ó Bell Syst. Tech. J., vol. 44, no. 4, pp. 547Ð588, Apr. 1965.
-%\bibitem{c13} S. P. Bingulac, ÒOn the compatibility of adaptive controllers (Published Conference Proceedings style),Ó in Proc. 4th Annu. Allerton Conf. Circuits and Systems Theory, New York, 1994, pp. 8Ð16.
-%\bibitem{c14} G. R. Faulhaber, ÒDesign of service systems with priority reservation,Ó in Conf. Rec. 1995 IEEE Int. Conf. Communications, pp. 3Ð8.
-%\bibitem{c15} W. D. Doyle, ÒMagnetization reversal in films with biaxial anisotropy,Ó in 1987 Proc. INTERMAG Conf., pp. 2.2-1Ð2.2-6.
-%\bibitem{c16} G. W. Juette and L. E. Zeffanella, ÒRadio noise currents n short sections on bundle conductors (Presented Conference Paper style),Ó presented at the IEEE Summer power Meeting, Dallas, TX, June 22Ð27, 1990, Paper 90 SM 690-0 PWRS.
-%\bibitem{c17} J. G. Kreifeldt, ÒAn analysis of surface-detected EMG as an amplitude-modulated noise,Ó presented at the 1989 Int. Conf. Medicine and Biological Engineering, Chicago, IL.
-%\bibitem{c18} J. Williams, ÒNarrow-band analyzer (Thesis or Dissertation style),Ó Ph.D. dissertation, Dept. Elect. Eng., Harvard Univ., Cambridge, MA, 1993. 
-%\bibitem{c19} N. Kawasaki, ÒParametric study of thermal and chemical nonequilibrium nozzle flow,Ó M.S. thesis, Dept. Electron. Eng., Osaka Univ., Osaka, Japan, 1993.
-%\bibitem{c20} J. P. Wilkinson, ÒNonlinear resonant circuit devices (Patent style),Ó U.S. Patent 3 624 12, July 16, 1990. 
-%
-%
-%
-%
-%
-%
-%\end{thebibliography}
-
-
-
 
 \end{document}
